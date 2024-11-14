@@ -7,7 +7,7 @@ from .main import app
 client = TestClient(app)
 
 def test_run_circuit():
-    circuit = QuantumCircuit(2)
+    circuit = QuantumCircuit(2, name="test")
     circuit.h(0)
     circuit.cx(0, 1)
     circuit.measure_all()

@@ -11,4 +11,4 @@ class Run(BaseModel):
 @app.post("/runs")
 def execute(run: Run):
     result = run_circuit(run.circuit)
-    return result
+    return { "status": "COMPLETED", "result": result }
