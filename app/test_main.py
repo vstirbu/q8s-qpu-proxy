@@ -30,7 +30,7 @@ def test_run_circuit_invalid():
 
 
 def test_run_circuit_from_backend():
-    simulator = Q8SBackend()
+    simulator = Q8SBackend(client=client)
 
     job = simulator.run(circuit)
 

@@ -10,10 +10,13 @@ from app.qiskit.job import Q8sJob
 class Q8SBackend(BackendV2, ABC):
     _client = None
 
-    def __init__(self, **kwargs):
+    def __init__(self, client: Client = None, **kwargs):
         super().__init__(**kwargs)
 
-        self._client = Client()
+        if client:
+            self._client = client
+        else:
+            self._client = Client()
 
     @classmethod
     def _default_options(self) -> Options:
