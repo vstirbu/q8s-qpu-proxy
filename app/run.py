@@ -1,9 +1,10 @@
-from qiskit import QuantumCircuit, transpile
+from qiskit import transpile
 from qiskit.qasm2 import loads
-
+from qiskit.result import Result
 from iqm.qiskit_iqm.iqm_provider import IQMProvider, IQMFakeAdonis
 
-def run_circuit(qasm: str, server_url: str = "https://demo.qc.iqm.fi/cocos") -> dict:
+
+def run_circuit(qasm: str, server_url: str = "https://demo.qc.iqm.fi/cocos") -> Result:
     circuit = loads(qasm)
 
     backend = IQMFakeAdonis()
