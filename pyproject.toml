@@ -1,0 +1,45 @@
+[project]
+name = "q8s-qpu-proxy"
+version = "0.1.0"
+description = "Qubernetes proxy service for remote QPUs"
+authors = [{ name = "Vlad Stirbu", email = "vstirbu@gmail.com" }]
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = ["quantum", "qpu", "qiskit"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+requires-python = ">= 3.8"
+
+dependencies = ["fastapi[standard]==0.115.5", "qiskit==1.1", "qiskit-iqm==15.4"]
+
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project.optional-dependencies]
+development = ["pytest", "black"]
+# Needed by the q8s backend to interact with the proxy service
+# should be moved to a separate package
+# qiskit_backend = ["httpx==0.27.2"]
+
+[tool.black]
+line-length = 120
+# target_version = ['py37']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+    \.git
+    | \.mypy_cache
+    | \.pytest_cache
+    | htmlcov
+    | build
+    | pybind11
+  )/
+)
+'''
