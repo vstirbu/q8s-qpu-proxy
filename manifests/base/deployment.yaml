@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qpu-proxy
+  labels:
+    app: qpu-proxy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: q8s-proxy
+  template:
+    metadata:
+      labels:
+        app: q8s-proxy
+    spec:
+      containers:
+      - name: q8s-proxy
+        image: ghcr.io/vstirbu/q8s-qpu-proxy:main
+        ports:
+          - containerPort: 80
+            name: qpu-proxy-svc
