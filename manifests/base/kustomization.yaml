@@ -9,3 +9,11 @@ commonLabels:
   kustomize.component: qpu-proxy
   app.kubernetes.io/name: qpu-proxy
   app.kubernetes.io/component: qpu-proxy
+configMapGenerator:
+  - name: cortex-config
+    files:
+      - configmaps/config.json
+secretGenerator:
+  - name: cortex-secrets
+    envs:
+      - secrets/cortex.env
