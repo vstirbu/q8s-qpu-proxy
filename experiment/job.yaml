@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: qpu-proxy-experiment
+  # namespace: q8s
+spec:
+  selector: {}
+  template:
+    metadata:
+      name: qpu-proxy-experiment
+    spec:
+      containers:
+        - name: qpu-proxy-experiment
+          image: docker.io/vstirbu/qpu-proxy-experiment:latest
+          env:
+            - name: QPU_PROXY_URL
+              value: "http://qpu-proxy-service.qubernetes:80"
+          command: ["python", "/app/main.py"]
+      restartPolicy: Never
