@@ -15,7 +15,12 @@ classifiers = [
 ]
 requires-python = ">= 3.8"
 
-dependencies = ["fastapi[standard]==0.115.5", "qiskit==1.1", "qiskit-iqm==15.4"]
+dependencies = [
+  "fastapi[standard]==0.115.5",
+  "qiskit==1.1",
+  "qiskit-iqm==15.4",
+  "iqm-cortex-cli=5.10",
+]
 
 [build-system]
 requires = ["setuptools >= 61.0"]
