@@ -18,7 +18,7 @@ requires-python = ">= 3.8"
 dependencies = [
   "fastapi[standard]==0.115.5",
   "qiskit==1.1",
-  "qiskit-iqm==13.10",
+  "qiskit-iqm==15.5",
   "iqm-cortex-cli==5.10",
 ]
 
