@@ -11,7 +11,7 @@ def run_circuit(qasm: str) -> Result:
     if os.getenv("IQM_TOKENS_FILE") is None:
         backend = IQMFakeAdonis()
     else:
-        provider = IQMProvider()
+        provider = IQMProvider(os.getenv("IQM_CORTEX_URL"))
         backend = provider.get_backend()
 
     new_circuit = transpile(circuit, backend)
