@@ -5,7 +5,7 @@ metadata:
   labels:
     app: qpu-proxy
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: q8s-proxy
@@ -15,8 +15,57 @@ spec:
         app: q8s-proxy
     spec:
       containers:
-      - name: q8s-proxy
-        image: ghcr.io/vstirbu/q8s-qpu-proxy:main
-        ports:
-          - containerPort: 80
-            name: qpu-proxy-svc
+        - name: q8s-proxy-api
+          image: ghcr.io/vstirbu/q8s-qpu-proxy:1-poc
+          imagePullPolicy: Always
+          env:
+            - name: IQM_TOKENS_FILE
+              value: "/cortex/config/tokens.json"
+            - name: IQM_CORTEX_URL
+              value: "https://demo-puhuri.qc.csc.fi/cocos"
+          volumeMounts:
+            - name: shared-data
+              mountPath: /cortex/config
+          command: ["fastapi"]
+          args: ["run", "app/main.py", "--port", "80"]
+          ports:
+            - containerPort: 80
+              name: qpu-proxy-svc
+        - name: q8s-proxy-auth
+          image: ghcr.io/vstirbu/q8s-qpu-proxy:1-poc
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: shared-data
+              mountPath: /cortex/config
+          command: ["cortex"]
+          args: ["auth", "login", "--no-daemon", "--config-file", "/cortex/config/config.json"]
+      initContainers:
+        - name: q8s-proxy-init-config
+          image: ghcr.io/vstirbu/q8s-qpu-proxy:1-poc
+          volumeMounts:
+            - name: shared-data
+              mountPath: /cortex/config
+            - name: cortex-config
+              mountPath: /cortex/init
+          command: ["cp"]
+          args: ["/cortex/init/config.json", "/cortex/config/"]
+        - name: q8s-proxy-auth-login
+          image: ghcr.io/vstirbu/q8s-qpu-proxy:1-poc
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: cortex-secrets
+          volumeMounts:
+            - name: shared-data
+              mountPath: /cortex/config
+          command: ["cortex"]
+          args: ["auth", "login", "--username", "$(CORTEX_USERNAME)", "--password", "$(CORTEX_PASSWORD)", "--no-refresh", "--config-file", "/cortex/config/config.json"]
+      volumes:
+        - name: shared-data
+          emptyDir: {}
+        - name: cortex-tokens
+          secret:
+            secretName: cortex-tokens
+        - name: cortex-config
+          configMap:
+            name: cortex-config
