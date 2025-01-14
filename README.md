@@ -9,7 +9,7 @@ This project provides the deployment of a QPU proxy service. The QPU proxy servi
 The repository is structured as follows:
 
 - `app`: Contains the source code of the QPU proxy service.
-- `manifests`: Contains the Kubernetes deployment files.
+- `manifests`: Contains the Kubernetes kustomize deployment files.
 - `experiments`: Contains the experiment files used to demonstrate the fucntionality of the QPU proxy service.
 
 ## Getting started
@@ -44,15 +44,23 @@ architecture-beta
 group q8s(logos:kubernetes)[Cluster]
 group q8sns[qubernetes] in q8s
 group q8sjobs[jobs] in q8s
+group apideployment[QPU Proxy Deployment] in q8sns
 
 service pod(server)[Job] in q8sjobs
 service proxysrv(server)[QPU Proxy SRV] in q8sns
-service proxyapi(server)[QPU Proxy API] in q8sns
+service dv(disk)[Shared Volume] in apideployment
+service proxyauth(server)[Auth] in apideployment
+service proxyapi(server)[API] in apideployment
 service qpu(internet)[QPU Gateway]
 
 pod:R --> L:proxysrv
 proxysrv:R --> L:proxyapi
 proxyapi:R --> L:qpu
+proxyapi:B -- T:dv
+dv:B -- T:proxyauth
 ```
 
-The proxy service takes care of authentication and authorization of the requests to the external QPU Gateway.
+The QPU proxy deployment includes two containers:
+
+- `auth`: handles authentication and authorization of the requests to the external QPU Gateway, using the provider tool (e.g. Cortex CLI).
+- `api`: handles the requests from the client, forwards the requests to the QPU Gateway, and returns the response to the client.

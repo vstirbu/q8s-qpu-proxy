@@ -1,4 +1,5 @@
 import os
+import json
 from qiskit import QuantumCircuit
 from app.qiskit.backend import Q8SBackend
 
@@ -22,4 +23,6 @@ circuit.measure_all()
 
 job = simulator.run(circuit)
 
-print("ran circuit")
+print("ran circuit", job.result().get_counts())
+print(json.dumps(job.result()._metadata, indent=2))
+# print(json.dumps(job.result().to_dict(), indent=2))

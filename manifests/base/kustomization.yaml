@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: qubernetes
 resources:
   - deployment.yaml
+  - namespace.yaml
   - service.yaml
 commonLabels:
   app: qpu-proxy

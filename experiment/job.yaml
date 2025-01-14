@@ -12,6 +12,7 @@ spec:
       containers:
         - name: qpu-proxy-experiment
           image: docker.io/vstirbu/qpu-proxy-experiment:latest
+          imagePullPolicy: Always
           env:
             - name: QPU_PROXY_URL
               value: "http://qpu-proxy-service.qubernetes:80"
